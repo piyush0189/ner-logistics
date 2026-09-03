@@ -1,0 +1,44 @@
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 64px auto 1fr;
+    grid-template-areas:
+      "top"
+      "side"
+      "main";
+  }
+
+  .sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .main {
+    padding: 12px;
+  }
+
+  .top-bar {
+    padding: 0 14px;
+  }
+
+  .top-bar-right {
+    gap: 8px;
+  }
+}

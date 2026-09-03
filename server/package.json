@@ -1,0 +1,18 @@
+{
+  "name": "ner-logistics-server",
+  "version": "1.0.0",
+  "description": "AI-enabled Logistics & Accessibility Intelligence Platform for North Eastern Region - backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "nanoid": "^5.0.7",
+    "socket.io": "^4.7.5"
+  }
+}

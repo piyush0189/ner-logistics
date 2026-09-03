@@ -1,0 +1,149 @@
+/* ========================================
+   ALERT FEED
+   ======================================== */
+
+.alert-item {
+  position: relative;
+
+  background: var(--panel-raised);
+  border-left: 3px solid var(--muted-dim);
+
+  padding: 10px 12px;
+  margin-bottom: 8px;
+
+  border-radius: 0 7px 7px 0;
+
+  font-size: 12.5px;
+  line-height: 1.5;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+/* ========================================
+   ALERT HOVER
+   ======================================== */
+
+.alert-item:hover {
+  background: #223128;
+}
+
+
+/* ========================================
+   CRITICAL ALERT
+   ======================================== */
+
+.alert-item.critical {
+  border-left-color: var(--critical);
+}
+
+.alert-item.critical:hover {
+  border-left-color: #e2836a;
+}
+
+
+/* ========================================
+   WARNING / HIGH RISK
+   ======================================== */
+
+.alert-item.warning {
+  border-left-color: var(--caution);
+}
+
+.alert-item.warning:hover {
+  border-left-color: #e6b65f;
+}
+
+
+/* ========================================
+   ALERT MESSAGE
+   ======================================== */
+
+.alert-item > div:first-child {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+
+/* ========================================
+   ALERT META
+   ======================================== */
+
+.alert-meta {
+  color: var(--muted);
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+
+  margin-top: 5px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.55px;
+}
+
+
+/* ========================================
+   ALERT SCROLLBAR
+   ======================================== */
+
+.alerts-panel .panel-body::-webkit-scrollbar {
+  width: 7px;
+}
+
+.alerts-panel .panel-body::-webkit-scrollbar-track {
+  background: var(--panel);
+}
+
+.alerts-panel .panel-body::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 10px;
+}
+
+.alerts-panel .panel-body::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-dim);
+}
+
+
+/* ========================================
+   FIREFOX SCROLLBAR
+   ======================================== */
+
+.alerts-panel .panel-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline) var(--panel);
+}
+
+
+/* ========================================
+   EMPTY ALERT STATE
+   ======================================== */
+
+.empty-state {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 20px 4px;
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .alert-item {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .alert-item > div:first-child {
+    font-size: 12px;
+  }
+
+  .alert-meta {
+    font-size: 9.5px;
+  }
+}

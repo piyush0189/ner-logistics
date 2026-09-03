@@ -1,0 +1,279 @@
+/* ========================================
+   PRAYAAN — DASHBOARD PAGE
+   ======================================== */
+
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* ========================================
+   KPI CARDS
+   ======================================== */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.kpi-card {
+  position: relative;
+  background:
+    linear-gradient(
+      145deg,
+      var(--panel-raised),
+      var(--panel)
+    );
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  padding: 17px 18px 15px;
+  min-height: 112px;
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* Top accent line */
+
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--river);
+}
+
+
+/* Different KPI colors */
+
+.kpi-card:nth-child(1)::before {
+  background: var(--caution);
+}
+
+.kpi-card:nth-child(2)::before {
+  background: var(--river);
+}
+
+.kpi-card:nth-child(3)::before {
+  background: var(--safe);
+}
+
+.kpi-card:nth-child(4)::before {
+  background: var(--critical);
+}
+
+
+/* Subtle glow */
+
+.kpi-card:nth-child(1):hover {
+  border-color: var(--caution);
+  box-shadow: 0 0 18px rgba(214, 162, 76, 0.08);
+}
+
+.kpi-card:nth-child(2):hover {
+  border-color: var(--river);
+  box-shadow: 0 0 18px rgba(79, 151, 168, 0.08);
+}
+
+.kpi-card:nth-child(3):hover {
+  border-color: var(--safe);
+  box-shadow: 0 0 18px rgba(91, 140, 90, 0.08);
+}
+
+.kpi-card:nth-child(4):hover {
+  border-color: var(--critical);
+  box-shadow: 0 0 18px rgba(193, 80, 46, 0.08);
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+}
+
+
+/* Critical KPI */
+
+.kpi-card.critical-kpi::before {
+  background: var(--critical);
+}
+
+
+/* ========================================
+   KPI LABEL
+   ======================================== */
+
+.kpi-label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   KPI VALUE
+   ======================================== */
+
+.kpi-value {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 12px;
+}
+
+
+/* Critical number */
+
+.kpi-card.critical-kpi .kpi-value {
+  color: #e2836a;
+}
+
+
+/* ========================================
+   KPI DESCRIPTION
+   ======================================== */
+
+.kpi-note {
+  color: var(--muted);
+  font-size: 10.5px;
+  margin-top: 8px;
+}
+
+
+/* ========================================
+   DASHBOARD MAP + ALERTS
+   ======================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr);
+  gap: 16px;
+
+  height: calc(100vh - 232px);
+  min-height: 500px;
+}
+
+.map-panel,
+.alerts-panel {
+  min-height: 0;
+}
+
+
+/* ========================================
+   PANEL SUBTITLE
+   ======================================== */
+
+.panel-subtitle {
+  color: var(--muted);
+  font-size: 10.5px;
+  margin-top: 3px;
+}
+
+
+/* ========================================
+   CRITICAL ALERT COUNT
+   ======================================== */
+
+.critical-count {
+  color: var(--critical);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   MAP PANEL
+   ======================================== */
+
+.map-panel .map-wrap {
+  flex: 1;
+  min-height: 0;
+}
+
+
+/* ========================================
+   ALERT PANEL
+   ======================================== */
+
+.alerts-panel .panel-body {
+  overflow-y: auto;
+}
+
+
+/* ========================================
+   DASHBOARD SECTION SPACING
+   ======================================== */
+
+.dashboard-page .panel-header {
+  min-height: 72px;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .map-panel {
+    min-height: 520px;
+  }
+
+  .alerts-panel {
+    min-height: 420px;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page {
+    gap: 12px;
+  }
+
+  .dashboard-grid {
+    gap: 12px;
+  }
+
+  .map-panel {
+    min-height: 400px;
+  }
+
+  .alerts-panel {
+    min-height: 380px;
+  }
+
+  .kpi-card {
+    min-height: 100px;
+  }
+
+  .kpi-value {
+    font-size: 30px;
+  }
+}

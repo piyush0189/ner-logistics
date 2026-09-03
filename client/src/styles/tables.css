@@ -1,0 +1,225 @@
+/* ========================================
+   PRAYAAN — TABLES & STATUS PILLS
+   ======================================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+/* TABLE HEADER */
+
+th {
+  text-align: left;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  padding: 9px 10px;
+  background: rgba(15, 23, 18, 0.35);
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+
+/* TABLE BODY */
+
+td {
+  padding: 10px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition:
+    background 0.18s ease;
+}
+
+tbody tr:hover {
+  background: rgba(79, 151, 168, 0.045);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========================================
+   STATUS PILLS
+   ======================================== */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* CONNECTED / SAFE */
+
+.pill.open,
+.pill.connected {
+  background: var(--safe-dim);
+  color: var(--safe);
+  border: 1px solid rgba(91, 140, 90, 0.2);
+}
+
+/* CAUTION / AT RISK */
+
+.pill.caution,
+.pill.at-risk {
+  background: var(--caution-dim);
+  color: var(--caution);
+  border: 1px solid rgba(214, 162, 76, 0.2);
+}
+
+/* HIGH RISK */
+
+.pill.high-risk {
+  background: var(--critical-dim);
+  color: #e2836a;
+  border: 1px solid rgba(193, 80, 46, 0.22);
+}
+
+/* BLOCKED / CUT OFF / ISOLATED */
+
+.pill.blocked,
+.pill.cut-off,
+.pill.isolated {
+  background: var(--critical-dim);
+  color: var(--critical);
+  border: 1px solid rgba(193, 80, 46, 0.22);
+}
+
+/* ========================================
+   SHIPMENT TABLE
+   ======================================== */
+
+.shipment-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+}
+
+.shipment-table-wrap table {
+  min-width: 760px;
+}
+
+.shipment-table-wrap th:first-child,
+.shipment-table-wrap td:first-child {
+  padding-left: 13px;
+}
+
+.shipment-table-wrap th:last-child,
+.shipment-table-wrap td:last-child {
+  padding-right: 13px;
+}
+
+.vehicle-id {
+  color: var(--river);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.shipment-route {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ========================================
+   DISTRICT TABLE
+   ======================================== */
+
+.district-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+}
+
+.district-table-wrap table {
+  min-width: 560px;
+}
+
+.district-table-wrap th:first-child,
+.district-table-wrap td:first-child {
+  padding-left: 13px;
+}
+
+.district-table-wrap th:last-child,
+.district-table-wrap td:last-child {
+  padding-right: 13px;
+}
+
+.district-name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ========================================
+   TABLE SCROLLBARS
+   ======================================== */
+
+.shipment-table-wrap::-webkit-scrollbar,
+.district-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.shipment-table-wrap::-webkit-scrollbar-track,
+.district-table-wrap::-webkit-scrollbar-track {
+  background: var(--panel);
+}
+
+.shipment-table-wrap::-webkit-scrollbar-thumb,
+.district-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 10px;
+}
+
+.shipment-table-wrap::-webkit-scrollbar-thumb:hover,
+.district-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-dim);
+}
+
+.shipment-table-wrap,
+.district-table-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline) var(--panel);
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 640px) {
+  th {
+    font-size: 9px;
+    padding: 8px 9px;
+  }
+
+  td {
+    padding: 9px;
+    font-size: 12px;
+  }
+
+  .pill {
+    min-width: 56px;
+    padding: 3px 7px;
+    font-size: 9px;
+  }
+}

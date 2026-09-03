@@ -1,0 +1,26 @@
+:root {
+  --bg: #0f1712;
+  --panel: #16211b;
+  --panel-raised: #1c2a22;
+  --hairline: #2b3a30;
+
+  --ink: #e8ede6;
+  --muted: #8fa093;
+  --muted-dim: #62705f;
+
+  --river: #4f97a8;
+  --river-dim: #3e7c8c;
+
+  --critical: #c1502e;
+  --critical-dim: #48261c;
+
+  --caution: #d6a24c;
+  --caution-dim: #443421;
+
+  --safe: #5b8c5a;
+  --safe-dim: #253524;
+
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "IBM Plex Sans", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}

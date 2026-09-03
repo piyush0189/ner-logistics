@@ -1,0 +1,342 @@
+/* ========================================
+   PRAYAAN — SIDEBAR
+   ======================================== */
+
+.sidebar {
+  grid-area: side;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  padding: 18px 10px;
+
+  background: var(--panel);
+  border-right: 1px solid var(--hairline);
+
+  overflow-y: auto;
+}
+
+
+/* ========================================
+   OPERATIONS SECTION
+   ======================================== */
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+
+/* ========================================
+   SECTION LABEL
+   ======================================== */
+
+.sidebar-label {
+  padding: 4px 9px 11px;
+
+  color: var(--muted-dim);
+
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   NAVIGATION ITEM
+   ======================================== */
+
+.nav-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  gap: 10px;
+
+  padding: 10px 14px;
+
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+
+  color: var(--muted);
+
+  font-family: var(--font-body);
+  font-size: 13.5px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+
+/* ========================================
+   NAVIGATION ICON
+   ======================================== */
+
+.nav-icon {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 15px;
+  min-width: 15px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1;
+}
+
+
+/* ========================================
+   HOVER
+   ======================================== */
+
+.nav-item:hover {
+  color: var(--ink);
+  background: var(--panel-raised);
+}
+
+.nav-item:hover .nav-icon {
+  color: var(--river);
+}
+
+
+/* ========================================
+   ACTIVE NAVIGATION
+   ======================================== */
+
+.nav-item.active {
+  color: var(--ink);
+
+  background: #1b2b23;
+
+  box-shadow:
+    inset 3px 0 0 var(--river);
+}
+
+.nav-item.active .nav-icon {
+  color: var(--river);
+}
+
+
+/* ========================================
+   ACTIVE INDICATOR
+   ======================================== */
+
+.nav-item.active::after {
+  content: "";
+
+  position: absolute;
+
+  right: 10px;
+  top: 50%;
+
+  width: 4px;
+  height: 4px;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: var(--river);
+
+  box-shadow:
+    0 0 7px rgba(79, 151, 168, 0.5);
+}
+
+
+/* ========================================
+   KEYBOARD FOCUS
+   ======================================== */
+
+.nav-item:focus-visible {
+  outline: 1px solid var(--river);
+  outline-offset: -1px;
+}
+
+
+/* ========================================
+   SIDEBAR FOOTER
+   ======================================== */
+
+.sidebar-footer {
+  margin-top: auto;
+
+  padding: 0 7px 2px;
+}
+
+
+/* ========================================
+   SYSTEM STATUS CARD
+   ======================================== */
+
+.system-status {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 12px;
+
+  background: #182820;
+
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+}
+
+
+/* ========================================
+   STATUS INDICATOR
+   ======================================== */
+
+.status-indicator {
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+
+  border-radius: 50%;
+
+  background: var(--safe);
+
+  box-shadow:
+    0 0 0 3px var(--safe-dim);
+}
+
+
+/* ========================================
+   STATUS TEXT
+   ======================================== */
+
+.status-title {
+  color: var(--ink);
+
+  font-size: 12px;
+  font-weight: 500;
+
+  line-height: 1.3;
+}
+
+.status-sub {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 10.5px;
+
+  line-height: 1.3;
+}
+
+
+/* ========================================
+   VERSION
+   ======================================== */
+
+.version {
+  padding-top: 10px;
+
+  color: var(--muted-dim);
+
+  font-family: var(--font-mono);
+  font-size: 9px;
+
+  text-align: center;
+
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   SIDEBAR SCROLLBAR
+   ======================================== */
+
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--panel);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-dim);
+}
+
+
+/* Firefox */
+
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline) var(--panel);
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .sidebar {
+    flex-direction: row;
+
+    align-items: center;
+
+    padding: 8px 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .sidebar-section {
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 3px;
+  }
+
+  .sidebar-label {
+    display: none;
+  }
+
+  .nav-item {
+    width: auto;
+
+    flex-shrink: 0;
+
+    padding: 9px 13px;
+  }
+
+  .nav-item.active::after {
+    display: none;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+}

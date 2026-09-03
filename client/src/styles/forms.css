@@ -1,0 +1,399 @@
+/* ========================================
+   PRAYAAN — FORMS & FIELD REPORTS
+   ======================================== */
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-grid label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  width: 100%;
+  background: var(--panel-raised);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 9px 11px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.form-grid input::placeholder,
+.form-grid textarea::placeholder {
+  color: var(--muted-dim);
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  border-color: var(--river);
+  box-shadow: 0 0 0 2px rgba(79, 151, 168, 0.08);
+}
+
+.form-grid textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ========================================
+   PRIMARY BUTTON
+   ======================================== */
+
+.btn-primary {
+  background: var(--river-dim);
+  color: var(--ink);
+  border: 1px solid var(--river);
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  align-self: flex-start;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--river);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   ROUTE PLANNER
+   ======================================== */
+
+.route-tool {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.route-tool select {
+  min-width: 150px;
+  background: var(--panel-raised);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 9px 11px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.route-tool select:focus {
+  border-color: var(--river);
+  box-shadow: 0 0 0 2px rgba(79, 151, 168, 0.08);
+}
+
+.route-validation {
+  margin: -4px 0 12px;
+  color: var(--caution);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2px;
+}
+
+/* ========================================
+   ROUTE RESULT
+   ======================================== */
+
+.route-result {
+  margin-bottom: 16px;
+}
+
+.route-success {
+  border-left-color: var(--river) !important;
+}
+
+.route-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.route-result-title {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.route-result-badge {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border: 1px solid rgba(79, 151, 168, 0.3);
+  border-radius: 4px;
+  color: var(--river);
+  background: rgba(79, 151, 168, 0.08);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.7px;
+}
+
+.route-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.route-metric {
+  padding: 9px 10px;
+  background: rgba(15, 23, 18, 0.35);
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+}
+
+.route-metric-label {
+  display: block;
+  color: var(--muted-dim);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.route-metric-value {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.route-segments {
+  padding-top: 2px;
+  line-height: 1.6;
+}
+
+/* ========================================
+   FIELD REPORT LAYOUT
+   ======================================== */
+
+.field-report-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 24px;
+  min-height: 0;
+}
+
+.field-report-form-panel,
+.field-report-list {
+  min-width: 0;
+}
+
+/* ========================================
+   CONNECTION STATUS
+   ======================================== */
+
+.report-connection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 11px;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+  background: var(--panel-raised);
+}
+
+.report-connection-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--muted-dim);
+}
+
+.report-connection.online {
+  border-color: rgba(91, 140, 90, 0.25);
+  background: rgba(91, 140, 90, 0.06);
+}
+
+.report-connection.online .report-connection-dot {
+  background: var(--safe);
+  box-shadow: 0 0 0 3px var(--safe-dim);
+}
+
+.report-connection.offline {
+  border-color: rgba(214, 162, 76, 0.25);
+  background: rgba(214, 162, 76, 0.06);
+}
+
+.report-connection.offline .report-connection-dot {
+  background: var(--caution);
+  box-shadow: 0 0 0 3px var(--caution-dim);
+}
+
+.report-connection-title {
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.report-connection-sub {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9.5px;
+  line-height: 1.4;
+}
+
+/* ========================================
+   OFFLINE QUEUE
+   ======================================== */
+
+.queued-report {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  border: 1px solid rgba(214, 162, 76, 0.22);
+  border-radius: 7px;
+  background: var(--caution-dim);
+}
+
+.queued-report-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  min-width: 27px;
+  border-radius: 50%;
+  background: rgba(214, 162, 76, 0.15);
+  color: var(--caution);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.queued-report-title {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.queued-report-sub {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+/* ========================================
+   FIELD REPORT TABLE
+   ======================================== */
+
+.field-report-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+}
+
+.field-report-table-wrap table {
+  min-width: 620px;
+}
+
+.report-officer {
+  color: var(--ink);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.report-note {
+  display: block;
+  max-width: 420px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ========================================
+   DISTRICT TABLE
+   ======================================== */
+
+.district-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.district-name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 900px) {
+  .field-report-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .field-report-form-panel {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 640px) {
+  .route-tool {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .route-tool select,
+  .route-tool .btn-primary {
+    width: 100%;
+  }
+
+  .route-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .route-result-header {
+    align-items: flex-start;
+  }
+
+  .field-report-layout {
+    gap: 16px;
+  }
+
+  .report-connection {
+    padding: 9px 10px;
+  }
+
+  .field-report-table-wrap table {
+    min-width: 560px;
+  }
+}
