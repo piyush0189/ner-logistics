@@ -14,28 +14,34 @@ export default function DistrictPanel({ districts = [], onRoute }) {
 
     try {
       const result = await getOptimalRoute(from, to);
+
       setRoute(result);
 
       if (onRoute) {
         onRoute(
           result.found
-            ? result.segments.map((s) => s.roadId)
+            ? (result.segments || []).map((s) => s.roadId)
             : []
         );
       }
     } catch (error) {
+      console.error("Route calculation failed:", error);
+
       setRoute({
         found: false,
         reason: "Unable to calculate the route. Please try again.",
       });
 
-      if (onRoute) onRoute([]);
+      if (onRoute) {
+        onRoute([]);
+      }
     } finally {
       setLoading(false);
     }
   }
 
-  const sameDistrict = from && to && from === to;
+  const sameDistrict =
+    from && to && from === to;
 
   return (
     <div className="district-panel">
@@ -52,10 +58,15 @@ export default function DistrictPanel({ districts = [], onRoute }) {
           onChange={(e) => setFrom(e.target.value)}
           aria-label="Origin district"
         >
-          <option value="">Origin</option>
+          <option value="">
+            Origin
+          </option>
 
           {districts.map((d) => (
-            <option key={d.id} value={d.id}>
+            <option
+              key={d.id}
+              value={d.id}
+            >
               {d.name}
             </option>
           ))}
@@ -66,10 +77,15 @@ export default function DistrictPanel({ districts = [], onRoute }) {
           onChange={(e) => setTo(e.target.value)}
           aria-label="Destination district"
         >
-          <option value="">Destination</option>
+          <option value="">
+            Destination
+          </option>
 
           {districts.map((d) => (
-            <option key={d.id} value={d.id}>
+            <option
+              key={d.id}
+              value={d.id}
+            >
               {d.name}
             </option>
           ))}
@@ -78,9 +94,16 @@ export default function DistrictPanel({ districts = [], onRoute }) {
         <button
           className="btn-primary"
           onClick={handleFindRoute}
-          disabled={loading || !from || !to || sameDistrict}
+          disabled={
+            loading ||
+            !from ||
+            !to ||
+            sameDistrict
+          }
         >
-          {loading ? "Calculating…" : "Suggest route"}
+          {loading
+            ? "Calculating…"
+            : "Suggest route"}
         </button>
 
       </div>
@@ -99,6 +122,7 @@ export default function DistrictPanel({ districts = [], onRoute }) {
             <div className="alert-item route-success">
 
               <div className="route-result-header">
+
                 <span className="route-result-title">
                   Recommended route
                 </span>
@@ -106,52 +130,83 @@ export default function DistrictPanel({ districts = [], onRoute }) {
                 <span className="route-result-badge">
                   AI SUGGESTED
                 </span>
+
               </div>
 
               <div className="route-metrics">
 
                 <div className="route-metric">
+
                   <span className="route-metric-label">
                     Distance
                   </span>
 
                   <span className="route-metric-value">
-                    {route.totalKm} km
+                    {route.totalKm ?? "—"} km
                   </span>
+
                 </div>
 
                 <div className="route-metric">
+
                   <span className="route-metric-label">
                     Avg. risk
                   </span>
 
                   <span className="route-metric-value">
-                    {route.avgRisk}/100
+                    {route.avgRisk ?? "—"}/100
                   </span>
+
                 </div>
 
                 <div className="route-metric">
+
                   <span className="route-metric-label">
                     Extra delay
                   </span>
 
                   <span className="route-metric-value">
-                    {route.estimatedExtraDelayMin} min
+                    {route.estimatedExtraDelayMin ?? 0} min
                   </span>
+
                 </div>
 
               </div>
 
               <div className="alert-meta route-segments">
-                {route.segments
-                  .map((s) => s.name)
-                  .join(" → ")}
+
+                {route.totalDurationMin != null && (
+                  <>
+                    Estimated travel time:{" "}
+                    <strong>
+                      {route.totalDurationMin} min
+                    </strong>
+                  </>
+                )}
+
+                {route.segments?.length > 0 && (
+                  <>
+                    {" • "}
+                    {route.segments
+                      .map((s) => s.name)
+                      .join(" → ")}
+                  </>
+                )}
+
+                {route.routingSource && (
+                  <>
+                    {" • "}
+                    Source: {route.routingSource}
+                  </>
+                )}
+
               </div>
 
             </div>
           ) : (
             <div className="alert-item critical">
-              {route.reason}
+              {route.reason ||
+                "No accessible route found under current conditions."}
             </div>
           )}
 
@@ -169,7 +224,9 @@ export default function DistrictPanel({ districts = [], onRoute }) {
         </div>
       ) : (
         <div className="district-table-wrap">
+
           <table>
+
             <thead>
               <tr>
                 <th>District</th>
@@ -180,6 +237,7 @@ export default function DistrictPanel({ districts = [], onRoute }) {
             </thead>
 
             <tbody>
+
               {districts.map((d) => (
                 <tr key={d.id}>
 
@@ -211,8 +269,11 @@ export default function DistrictPanel({ districts = [], onRoute }) {
 
                 </tr>
               ))}
+
             </tbody>
+
           </table>
+
         </div>
       )}
 

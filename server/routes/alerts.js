@@ -1,68 +1,129 @@
 import { Router } from "express";
+import { districts } from "../data/mockData.js";
 import { getNetworkSnapshot } from "../utils/riskEngine.js";
-import { vehicles, fieldReports } from "../data/mockData.js";
 
 const router = Router();
 
-function buildAlerts() {
-  const { roads } = getNetworkSnapshot();
+
+// Build alerts from the CURRENT network risk
+export async function buildAlerts() {
+  const snapshot = await getNetworkSnapshot();
+
   const alerts = [];
 
-  for (const r of roads) {
-    if (r.status === "blocked") {
+  for (const road of snapshot.roads) {
+    if (road.status === "blocked") {
       alerts.push({
-        id: `AL-${r.id}-blocked`,
-        type: "blocked-road",
+        id: `road-${road.id}-blocked`,
+        type: "road-blocked",
         severity: "critical",
-        roadId: r.id,
-        message: `${r.name} (${r.from}–${r.to}) is impassable. Predicted risk score ${r.risk}/100.`,
-        timestamp: Date.now(),
+        title: "Road Blocked",
+        message: `${road.name} is currently blocked due to high risk conditions.`,
+        roadId: road.id,
+        createdAt: new Date().toISOString()
       });
-    } else if (r.status === "high-risk") {
+    } else if (road.status === "high-risk") {
       alerts.push({
-        id: `AL-${r.id}-highrisk`,
-        type: "high-risk-corridor",
-        severity: "warning",
-        roadId: r.id,
-        message: `${r.name} (${r.from}–${r.to}) flagged as high-risk corridor. Risk score ${r.risk}/100, expect delays.`,
-        timestamp: Date.now(),
+        id: `road-${road.id}-risk`,
+        type: "high-risk-road",
+        severity: "high",
+        title: "High Risk Road",
+        message: `${road.name} has high logistics risk under current conditions.`,
+        roadId: road.id,
+        createdAt: new Date().toISOString()
+      });
+    } else if (road.status === "caution") {
+      alerts.push({
+        id: `road-${road.id}-caution`,
+        type: "road-caution",
+        severity: "medium",
+        title: "Road Caution",
+        message: `${road.name} requires caution under current conditions.`,
+        roadId: road.id,
+        createdAt: new Date().toISOString()
       });
     }
   }
 
-  for (const v of vehicles) {
-    if (v.status === "delayed") {
-      alerts.push({
-        id: `AL-${v.id}-delayed`,
-        type: "delayed-delivery",
-        severity: "warning",
-        vehicleId: v.id,
-        message: `${v.id} carrying ${v.cargo} is delayed on route ${v.originId} → ${v.destId}.`,
-        timestamp: Date.now(),
-      });
-    }
-  }
 
-  for (const fr of fieldReports) {
-    if (fr.severity === "high") {
+  // Create weather alerts from REAL Open-Meteo data
+  for (const weather of snapshot.weatherDetails) {
+
+    if (weather.error) {
+      continue;
+    }
+
+
+    if (weather.severity >= 75) {
+
       alerts.push({
-        id: `AL-${fr.id}`,
-        type: "field-report",
+        id: `weather-${weather.districtId}-critical`,
+        type: "weather",
         severity: "critical",
-        roadId: fr.roadId,
-        message: `Field report from ${fr.officer}: ${fr.note}`,
-        timestamp: fr.timestamp,
+        title: "Severe Weather",
+        message: `${weather.name} is experiencing ${weather.condition}.`,
+        districtId: weather.districtId,
+        createdAt: new Date().toISOString()
+      });
+
+    } else if (weather.severity >= 50) {
+
+      alerts.push({
+        id: `weather-${weather.districtId}-high`,
+        type: "weather",
+        severity: "high",
+        title: "Severe Weather",
+        message: `${weather.name} is experiencing ${weather.condition}.`,
+        districtId: weather.districtId,
+        createdAt: new Date().toISOString()
+      });
+
+    } else if (weather.severity >= 30) {
+
+      alerts.push({
+        id: `weather-${weather.districtId}-medium`,
+        type: "weather",
+        severity: "medium",
+        title: "Weather Alert",
+        message: `${weather.name} is experiencing ${weather.condition}.`,
+        districtId: weather.districtId,
+        createdAt: new Date().toISOString()
       });
     }
   }
 
-  return alerts.sort((a, b) => b.timestamp - a.timestamp);
+
+  return alerts;
 }
 
-// GET /api/alerts - live alert feed
-router.get("/", (req, res) => {
-  res.json({ alerts: buildAlerts() });
+
+// GET /api/alerts
+router.get("/", async (req, res) => {
+
+  try {
+
+    const alerts =
+      await buildAlerts();
+
+
+    res.json({
+      alerts
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Alerts API error:",
+      error
+    );
+
+
+    res.status(500).json({
+      error: "Unable to load alerts",
+      message: error.message
+    });
+  }
 });
 
-export { buildAlerts };
+
 export default router;

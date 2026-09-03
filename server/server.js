@@ -1,82 +1,274 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import { createServer } from "http";
+import http from "http";
 import { Server } from "socket.io";
 
 import districtsRouter from "./routes/districts.js";
 import roadsRouter from "./routes/roads.js";
-import alertsRouter, { buildAlerts } from "./routes/alerts.js";
-import vehiclesRouter, { getLiveVehicles } from "./routes/vehicles.js";
+import alertsRouter, {
+  buildAlerts
+} from "./routes/alerts.js";
+import vehiclesRouter, {
+  getLiveVehicles
+} from "./routes/vehicles.js";
 import reportsRouter from "./routes/reports.js";
 import weatherRouter from "./routes/weather.js";
-import { getNetworkSnapshot } from "./utils/riskEngine.js";
-import { vehicles as vehicleStore, roads as roadDefs } from "./data/mockData.js";
+
+import {
+  getNetworkSnapshot
+} from "./utils/riskEngine.js";
+
+import {
+  vehicles as vehicleStore,
+  roads as roadDefs
+} from "./data/mockData.js";
+
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, { cors: { origin: "*" } });
 
-const PORT = process.env.PORT || 4000;
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+});
+
+
+/* -----------------------------
+   MIDDLEWARE
+----------------------------- */
 
 app.use(cors());
+
 app.use(express.json());
+
 app.use(morgan("dev"));
 
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "ner-logistics-server", time: new Date().toISOString() });
+
+/* -----------------------------
+   HEALTH CHECK
+----------------------------- */
+
+app.get("/", (req, res) => {
+  res.json({
+    name: "Prayaan Logistics Intelligence Platform",
+    status: "running",
+    timestamp: new Date().toISOString()
+  });
 });
+
+
+/* -----------------------------
+   API ROUTES
+----------------------------- */
 
 app.use("/api/districts", districtsRouter);
+
 app.use("/api/roads", roadsRouter);
+
 app.use("/api/alerts", alertsRouter);
+
 app.use("/api/vehicles", vehiclesRouter);
+
 app.use("/api/reports", reportsRouter);
+
 app.use("/api/weather", weatherRouter);
 
-app.get("/api/snapshot", (req, res) => {
-  res.json({
-    ...getNetworkSnapshot(),
-    vehicles: getLiveVehicles(),
-    alerts: buildAlerts(),
-    generatedAt: Date.now(),
-  });
-});
 
-// --- Real-time layer -------------------------------------------------
-// Advances each vehicle along its road on a tick, broadcasts fresh
-// positions + alerts to all connected dashboard/mobile clients, and
-// simulates GPS pings for field-level tracking.
-function advanceVehicles() {
-  for (const v of vehicleStore) {
-    if (v.status === "delayed") continue;
-    const road = roadDefs.find((r) => r.id === v.roadId);
-    const step = 1 / (road.lengthKm / 8); // roughly a few km per tick
-    v.progress = Math.min(1, v.progress + step);
-    if (v.progress >= 1) {
-      v.progress = 0;
-      const wasFrom = v.originId;
-      v.originId = v.destId;
-      v.destId = wasFrom;
-      v.direction = v.direction === "forward" ? "reverse" : "forward";
-    }
+/* -----------------------------
+   NETWORK SNAPSHOT
+----------------------------- */
+
+app.get("/api/snapshot", async (req, res) => {
+  try {
+
+    const snapshot =
+      await getNetworkSnapshot();
+
+    const liveVehicles =
+      await getLiveVehicles();
+
+    const alerts =
+      await buildAlerts();
+
+
+    res.json({
+      ...snapshot,
+
+      vehicles: liveVehicles,
+
+      alerts,
+
+      generatedAt: Date.now()
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Snapshot API error:",
+      error
+    );
+
+    res.status(500).json({
+      error: "Unable to generate network snapshot",
+      message: error.message
+    });
   }
-}
-
-io.on("connection", (socket) => {
-  socket.emit("snapshot", {
-    ...getNetworkSnapshot(),
-    vehicles: getLiveVehicles(),
-    alerts: buildAlerts(),
-  });
 });
 
-setInterval(() => {
-  advanceVehicles();
-  io.emit("vehicles", getLiveVehicles());
-  io.emit("alerts", buildAlerts());
+
+/* -----------------------------
+   SOCKET.IO
+----------------------------- */
+
+io.on("connection", async (socket) => {
+
+  console.log(
+    `Client connected: ${socket.id}`
+  );
+
+
+  try {
+
+    const snapshot =
+      await getNetworkSnapshot();
+
+    const liveVehicles =
+      await getLiveVehicles();
+
+    const alerts =
+      await buildAlerts();
+
+
+    socket.emit("snapshot", {
+
+      ...snapshot,
+
+      vehicles: liveVehicles,
+
+      alerts
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Socket snapshot error:",
+      error
+    );
+
+    socket.emit("error", {
+      message:
+        "Unable to generate live snapshot"
+    });
+  }
+
+
+  socket.on("disconnect", () => {
+
+    console.log(
+      `Client disconnected: ${socket.id}`
+    );
+
+  });
+
+});
+
+
+/* -----------------------------
+   LIVE UPDATE LOOP
+----------------------------- */
+
+setInterval(async () => {
+
+  try {
+
+    /*
+     * Move simulated vehicle
+     * positions forward.
+     *
+     * NOTE:
+     * Vehicle GPS will be replaced
+     * with real GPS/device data later.
+     */
+
+    for (const vehicle of vehicleStore) {
+
+      if (
+        vehicle.status === "in-transit" ||
+        vehicle.status === "delayed"
+      ) {
+
+        vehicle.progress += 0.002;
+
+        if (vehicle.progress >= 1) {
+          vehicle.progress = 0;
+        }
+
+      }
+
+    }
+
+
+    const liveVehicles =
+      await getLiveVehicles();
+
+    const alerts =
+      await buildAlerts();
+
+    const snapshot =
+      await getNetworkSnapshot();
+
+
+    io.emit(
+      "vehicles",
+      liveVehicles
+    );
+
+
+    io.emit(
+      "alerts",
+      alerts
+    );
+
+
+    io.emit(
+      "network",
+      snapshot
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Live update error:",
+      error
+    );
+
+  }
+
 }, 4000);
 
-httpServer.listen(PORT, () => {
-  console.log(`NER Logistics Intelligence server running on http://localhost:${PORT}`);
-});
+
+/* -----------------------------
+   SERVER
+----------------------------- */
+
+const PORT =
+  process.env.PORT || 5000;
+
+server.listen(
+  PORT,
+  () => {
+
+    console.log(
+      `Prayaan backend running on http://localhost:${PORT}`
+    );
+
+    console.log(
+      `API available at http://localhost:${PORT}/api`
+    );
+
+  }
+);
