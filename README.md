@@ -35,7 +35,7 @@ Requires Node.js 18+.
 ```bash
 cd server
 npm install
-npm run dev        # http://localhost:4000
+npm run dev        # http://localhost:5000
 ```
 
 **2. Start the frontend** (in a new terminal)
@@ -47,6 +47,23 @@ npm run dev         # http://localhost:5173
 
 Open http://localhost:5173. The Vite dev server proxies `/api` and `/socket.io` to the backend, so no
 extra config is needed.
+
+## Running with Docker & Docker Compose
+
+To run the entire platform with Docker:
+
+```bash
+docker compose up --build
+```
+
+This starts two containers:
+1. **`pragyaan-backend`**: Express API + Socket.io server running on Node 20 (`http://localhost:5000`) with built-in healthcheck.
+2. **`pragyaan-frontend`**: Production multi-stage build served via Nginx on `http://localhost:5173`, with automatic reverse proxying for `/api` and `/socket.io` to the backend container.
+
+To stop the containers:
+```bash
+docker compose down
+```
 
 ## What's implemented vs. what's mocked
 

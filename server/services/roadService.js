@@ -185,109 +185,53 @@ export async function getRealRoadRoutes(
   roads,
   districts
 ) {
+  return Promise.all(
+    roads.map(async (road) => {
+      const from =
+        districts.find(
+          (district) =>
+            district.id === road.from
+        );
 
-  const results = [];
+      const to =
+        districts.find(
+          (district) =>
+            district.id === road.to
+        );
 
+      if (!from || !to) {
+        return {
+          roadId: road.id,
+          error: true,
+          message: "District coordinates unavailable.",
+          source: "OpenStreetMap / OSRM"
+        };
+      }
 
-  for (const road of roads) {
-
-    const from =
-      districts.find(
-        (district) =>
-          district.id === road.from
-      );
-
-
-    const to =
-      districts.find(
-        (district) =>
-          district.id === road.to
-      );
-
-
-    if (!from || !to) {
-
-      results.push({
-
-        roadId:
-          road.id,
-
-        error:
-          true,
-
-        message:
-          "District coordinates unavailable.",
-
-        source:
-          "OpenStreetMap / OSRM"
-
-      });
-
-      continue;
-
-    }
-
-
-    try {
-
-      const route =
-        await getRoadRoute(
+      try {
+        return await getRoadRoute(
           road,
           from,
           to
         );
+      } catch (error) {
+        console.error(
+          `Road routing failed for ${road.id}:`,
+          error.message
+        );
 
-
-      results.push(route);
-
-    } catch (error) {
-
-      console.error(
-        `Road routing failed for ${road.id}:`,
-        error.message
-      );
-
-
-      /*
-       * Do not invent road information
-       * when the real service fails.
-       */
-      results.push({
-
-        roadId:
-          road.id,
-
-        roadName:
-          road.name,
-
-        from:
-          from.id,
-
-        to:
-          to.id,
-
-        fromName:
-          from.name,
-
-        toName:
-          to.name,
-
-        error:
-          true,
-
-        message:
-          "Real road routing data temporarily unavailable.",
-
-        source:
-          "OpenStreetMap / OSRM"
-
-      });
-
-    }
-
-  }
-
-
-  return results;
-
+        return {
+          roadId: road.id,
+          roadName: road.name,
+          from: from.id,
+          to: to.id,
+          fromName: from.name,
+          toName: to.name,
+          error: true,
+          message: "Real road routing data temporarily unavailable.",
+          source: "OpenStreetMap / OSRM"
+        };
+      }
+    })
+  );
 }
